@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://kit.fontawesome.com/b503f85050.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="main.css" />
+    <script>
+      const movieData = [
+        { title: "Polaroid", year: 2022, image: "polaroid.jpg" },
+        { title: "Malefiz", year: 2013, image: "malefiz.jpg" },
+        { title: "Joker", year: 2018, image: "joker.jpg" },
+        {
+          title: "The Last Samurai (Son Samuray)",
+          year: 2016,
+          image: "the last samurai.jpg",
+        },
+        { title: "Alacakaranlık", year: 2014, image: "alacakaranlık.jpg" },
+        { title: "Avatar", year: 2013, image: "avatar.jpg" },
+        { title: "Siberia", year: 2015, image: "siberia.jpg" },
+        { title: "Alpha", year: 2021, image: "alpha.jpg" },
+        { title: "Bird Box", year: 2022, image: "bird box.jpg" },
+        { title: "Cruella", year: 2010, image: "cruella.jpg" },
+        { title: "Thor", year: 2020, image: "thor.jpg" },
+        { title: "Us (Biz)", year: 2013, image: "us.jpg" },
+        { title: "Venom", year: 2012, image: "venom.jpg" },
+        { title: "Alita - Savaş Meleği", year: 2019, image: "alita.jpg" },
+        { title: "Dont Breathe 2", year: 2021, image: "dont breathe.jpg" },
+        { title: "Mortal Kombat", year: 2020, image: "mortal kombat.jpg" },
+      ];
+
+      const imageList = [];
+      const nameList = [];
+      const yearList = [];
+
+      movieData.forEach((movie) => {
+        imageList.push(movie.image);
+        nameList.push(movie.title);
+        yearList.push(movie.year);
+      });
+
+      function loadProfilFavorite() {
+        profileListContainer = document.getElementById("favorite-form-item-id");
+        loadProfilList(profileListContainer);
+      }
+      function loadProfilToBeWatched() {
+        profileListContainer = document.getElementById(
+          "toBeWatched-form-item-id"
+        );
+        loadProfilList(profileListContainer);
+      }
+      function loadProfilWatched() {
+        profileListContainer = document.getElementById("watched-form-item-id");
+        loadProfilList(profileListContainer);
+      }
+
+      function loadProfilList(profileListContainer) {
+        for (let i = 0; i < imageList.length; i++) {
+          const itemDiv = document.createElement("div");
+          itemDiv.classList.add("item");
+          itemDiv.onclick = function () {
+            moviePage(i);
+          };
+
+          const img = document.createElement("img");
+          img.src = "image/" + imageList[i];
+          img.alt = "resim";
+          img.classList.add("item-img");
+          img.style.width = "100%";
+          img.style.height = "100%";
+
+          itemDiv.appendChild(img);
+
+          profileListContainer.appendChild(itemDiv);
+        }
+      }
+
+      function loadPageNew() {
+        const container = document.getElementById("homePage");
+
+        for (let i = 0; i < 16; i++) {
+          const mainContent = document.createElement("div");
+          mainContent.className = "left-main-content";
+          mainContent.onclick = () => moviePage(i);
+
+          const rightContent = document.createElement("div");
+          rightContent.className = "left-main-content-right";
+
+          rightContent.innerHTML += `
+      <div class="imdb" style="margin-top:0;">
+        <i class="fas fa-star"></i>&nbsp;
+        <span class="imdb-span" style="font-size:11px;">8.0/10</span>
+      </div>
+      <div class="imdb">
+        <i class="far fa-eye" style="font-size:15px;"></i>
+        <span class="imdb-span">&nbsp;3624</span>
+      </div>
+      <div class="imdb">
+        <i class="far fa-clock"></i>
+        <span class="imdb-span">&nbsp;2s 33dk</span>
+      </div>
+      <div class="imdb">
+        <i class="far fa-calendar-alt"></i>
+        <span class="imdb-span">&nbsp;${yearList[i]}</span>
+      </div>
+      <div class="imdb">
+        <i class="far fa-flag"></i>
+        <p class="imdb-span">&nbsp;Amerika</p>
+      </div>
+    `;
+
+          const header = document.createElement("div");
+          header.className = "left-main-content-header";
+          header.innerHTML = `
+      <button class="left-main-content-a">
+        <img src="image/${imageList[i]}" alt="resim" class="left-main-content-image">
+      </button>
+    `;
+
+          const bottomFrame = document.createElement("div");
+          bottomFrame.className = "left-main-bottom-frame";
+          bottomFrame.innerHTML = `
+      <div class="left-main-content-bottom">
+        <p>Aksiyon, Bilim Kurgu, Fantastik</p>
+      </div>
+      <div class="movie-name">
+        <p>${nameList[i]}</p>
+      </div>
+    `;
+
+          mainContent.appendChild(rightContent);
+          mainContent.appendChild(header);
+          mainContent.appendChild(bottomFrame);
+
+          container.appendChild(mainContent);
+        }
+      }
+
+      function scrollSet() {
+        if (document.documentElement.scrollTop >= 295) {
+          $(".right-main-container").css({
+            position: "sticky",
+            top: "0px",
+          });
+        }
+        if (document.documentElement.scrollTop < 400) {
+          $(".right-main-container").css({
+            position: "static",
+          });
+        }
+      }
+    </script>
+    <title>Main</title>
+
+    <script>
+      $(document).ready(function () {
+        setProfil();
+        $(".header-login-button1").css("display", "block");
+        $(".header-login-button2").css("display", "block");
+        $(".header-logout-button").css("display", "none");
+        $("#profilNavButton").css("display", "block");
+      });
+    </script>
+  </head>
+
+  <body onscroll="scrollSet();">
+    <div class="flex">
+      <header id="header">
+        <div class="header-left">
+          <div class="header-logo header-box">
+            <a href="Main.html">
+              <img
+                src="image/movie logo.png"
+                alt="logo image"
+                style="width: 170px"
+              />
+            </a>
+          </div>
+        </div>
+        <div class="header-search-box header-box">
+          <div class="header-search-box-button">
+            <input type="button" value="Ara" class="header-search-box-item" />
+          </div>
+          <input
+            type="search"
+            class="header-search-box-search"
+            placeholder="Arama yap..."
+          />
+        </div>
+        <div class="header-right">
+          <div class="header-login header-box">
+            <div class="header-login-button1">
+              <button
+                class="header-login-button"
+                id="header-login"
+                onclick="openModal(0);"
+              >
+                <i class="fas fa-sign-in-alt" style="margin-right: 4px"></i
+                >Giriş
+              </button>
+            </div>
+            <div class="header-login-button2">
+              <button
+                class="header-login-button"
+                id="header-register"
+                onclick="openModal(1);"
+              >
+                <i class="far fa-id-badge" style="margin-right: 4px"></i>Kayıt
+              </button>
+            </div>
+            <div class="header-logout-button" style="padding: 10px">
+              <a
+                href="Logout.jsp"
+                class="header-login-button"
+                id="header-logout"
+                ><i class="fas fa-sign-out-alt" style="color: red"></i
+                >&nbsp;Çıkış</a
+              >
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="header-login-modal">
+        <!-- Form Başlangıç -->
+        <form
+          action="LoginServlet"
+          name="loginForm"
+          id="loginForm"
+          class="header-login-form"
+        >
+          <div class="header-login-form-image">
+            <div class="header-login-form-image-frame" style="border: 50%">
+              <img
+                src="image/frame.png"
+                alt="frame"
+                class="common-image-frame"
+                id="login-frame"
+              />
+            </div>
+            <img
+              src="image/blue user.png"
+              alt="Profil Image"
+              id="login-image"
+              class="common-image"
+            />
+            <i
+              class="fas fa-times"
+              style="
+                position: absolute;
+                right: 6px;
+                top: -5px;
+                font-size: 23px;
+                cursor: pointer;
+              "
+              onclick="closeModal(0);"
+            ></i>
+          </div>
+          <div class="header-login-form-input">
+            <label for="userName" style="font-size: 15.5px" class="login-label"
+              >Kullanıcı Adı</label
+            >
+            <input
+              type="text"
+              name="loginUserName"
+              id="loginUserName"
+              placeholder="Kullanıcı adı"
+              class="form-input login-input"
+              onchange="controlInputForOnChange(0,0);"
+            />
+            <label for="password" style="font-size: 15.5px" class="login-label"
+              >Şifre</label
+            >
+            <input
+              type="password"
+              name="loginPassword"
+              id="loginPassword"
+              class="form-input login-input"
+              placeholder="Şifre"
+              onchange="controlInputForOnChange(0,1);"
+            />
+            <input
+              type="button"
+              value="Giriş"
+              name="login-submit"
+              id="loginButton"
+              class="form-submit-button"
+            />
+          </div>
+          <div class="header-login-form-footer">
+            <div
+              class="header-login-form-footer-url"
+              style="display: flex; justify-content: flex-end; margin-top: 8px"
+            >
+              <a
+                href="#"
+                style="
+                  color: rgb(255, 255, 255);
+                  font-weight: lighter;
+                  font-size: 15px;
+                "
+                >Şifremi unuttum</a
+              >
+            </div>
+          </div>
+          <div class="header-form-message">
+            <p class="exception-message" id="loginMessage"></p>
+          </div>
+          <div class="header-login-form-footnote">
+            <p
+              style="
+                margin-block-start: 1px;
+                margin-block-end: 0px;
+                font-size: 14px;
+                font-weight: lighter;
+              "
+            >
+              Hesabın yok mu?
+            </p>
+            <input
+              type="button"
+              class="element-footer-button"
+              value="Kayıt ol"
+              onclick="fromLoginToRegister();"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="header-register-modal">
+        <form
+          action="RegisterServlet"
+          name="registerForm"
+          id="registerForm"
+          class="header-register-modal-form"
+          method="POST"
+        >
+          <div class="header-login-form-image">
+            <div class="header-login-form-image-frame">
+              <img
+                src="image/frame.png"
+                alt="frame"
+                class="common-image-frame"
+              />
+            </div>
+            <img
+              src="image/register ico no frame.png"
+              alt="Profil Image"
+              class="common-image"
+            />
+            <i
+              class="fas fa-times"
+              style="
+                position: absolute;
+                right: 6px;
+                top: -5px;
+                font-size: 23px;
+                cursor: pointer;
+              "
+              onclick="closeModal(1);"
+            ></i>
+          </div>
+
+          <div class="header-register-modal-form-main">
+            <label for="registerUserName">Kullanıcı adı</label>
+            <input
+              type="text"
+              name="registerUserName"
+              id="registerUserName"
+              class="form-input register-input"
+              placeholder="Kullanıcı adı"
+              onchange="controlInputForOnChange(1,0);"
+            />
+            <label for="registerEmail">E-posta adresi</label>
+            <input
+              type="email"
+              name="registerEmail"
+              id="registerEmail"
+              class="form-input register-input"
+              placeholder="E-posta"
+              onchange="controlInputForOnChange(1,1);"
+            />
+            <label for="registerPassword">Şifre</label>
+            <input
+              type="password"
+              name="registerPassword"
+              id="registerPassword"
+              class="form-input register-input"
+              placeholder="Şifre"
+              onchange="controlInputForOnChange(1,2);"
+            />
+            <input
+              type="button"
+              value="Kayıt"
+              id="registerButton"
+              class="form-submit-button"
+            />
+          </div>
+          <div class="header-form-message">
+            <p class="exception-register-message" id="registerMessage"></p>
+          </div>
+          <div class="header-register-modal-form-footer">
+            <p style="margin-block: 0px; font-size: 15px; font-weight: lighter">
+              Hesabın var mı?
+            </p>
+            <input
+              type="button"
+              value="Giriş yap"
+              class="element-footer-button"
+              onclick="fromRegisterToLogin();"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="slide" id="slide">
+        <div class="slide-content">
+          <div class="slide-content-item slide-content-item-one">
+            <div class="slide-item-img">
+              <img src="image/alita.jpg" alt="image" class="slide-item-image" />
+            </div>
+            <div class="slide-item-img">
+              <img
+                src="image/bird box.jpg"
+                alt="image"
+                class="slide-item-image"
+              />
+            </div>
+            <div class="slide-item-img">
+              <img
+                src="image/dont breathe.jpg"
+                alt="image"
+                class="slide-item-image"
+              />
+            </div>
+            <div class="slide-item-img">
+              <img
+                src="image/mortal kombat.jpg"
+                alt="image"
+                class="slide-item-image"
+              />
+            </div>
+            <div class="slide-item-img">
+              <img
+                src="image/malefiz.jpg"
+                alt="image"
+                class="slide-item-image"
+              />
+            </div>
+            <div class="slide-item-img">
+              <img
+                src="image/polaroid.jpg"
+                alt="image"
+                class="slide-item-image"
+              />
+            </div>
+          </div>
+        </div>
+        <i class="fas fa-chevron-right" onclick="toRightSlide();"></i>
+        <i class="fas fa-chevron-left" onclick="toLeftSlide();"></i>
+      </div>
+      <nav id="nav-element">
+        <div class="left-nav">
+          <a href="javascript:void(0);" onclick="homePage();" class="left-nav-a"
+            >Anasayfa</a
+          >
+          <a href="#" class="left-nav-a">Trend</a>
+          <a href="#" class="left-nav-a">Tavsiye</a>
+          <div class="left-nav-filter-main">
+            <button class="filter-button">
+              Filtrele<i class="fas fa-caret-down" style="margin-left: 2px"></i>
+            </button>
+            <div class="filter-button-content">
+              <a href="#" class="left-nav-a">2021</a>
+              <a href="#" class="left-nav-a">IMDB 8+</a>
+              <a href="#" class="left-nav-a">IMDB Top 250</a>
+              <a href="#" class="left-nav-a">En Çok İzlenen</a>
+              <a href="#" class="left-nav-a">En Çok Yorumlanan</a>
+            </div>
+          </div>
+          <div class="left-nav-filter-main-alternative">
+            <button class="filter-button-alternative">
+              Filtrele<i class="fas fa-caret-down" style="margin-left: 2px"></i>
+            </button>
+            <div class="filter-button-content-alternative">
+              <a href="#" class="left-nav-a">Trend</a>
+              <a href="#" class="left-nav-a">Tavsiye</a>
+              <a href="#" class="left-nav-a">2021</a>
+              <a href="#" class="left-nav-a">IMDB 8+</a>
+              <a href="#" class="left-nav-a">IMDB Top 250</a>
+              <a href="#" class="left-nav-a">En Çok İzlenen</a>
+              <a href="#" class="left-nav-a">En Çok Yorumlanan</a>
+            </div>
+          </div>
+        </div>
+        <div class="right-nav">
+          <button class="filter-button" onclick="adminPage();">
+            Admin Panel
+          </button>
+          <button class="filter-button" onclick="setMode();">
+            <i
+              class="fas fa-moon"
+              id="dark-icon"
+              style="color: gray; font-size: 18px; display: none"
+            ></i>
+            <i
+              class="fas fa-sun"
+              id="light-icon"
+              style="color: yellow; font-size: 18px"
+            ></i>
+          </button>
+          <button
+            id="profilNavButton"
+            class="filter-button"
+            onclick="openModal(2);"
+          >
+            <i class="fas fa-user" style="margin-right: 4px"></i>Profil
+          </button>
+        </div>
+        <!--**************************START*******************************-->
+        <div class="right-nav-modal">
+          <div class="right-nav-modal-frame">
+            <div class="right-nav-modal-frame-header">
+              <div class="testing">
+                <img
+                  src="image/frame.png"
+                  alt="Profil Image"
+                  class="profil-image-frame"
+                  id="test"
+                />
+              </div>
+              <img
+                src="image/profil foto.jpg"
+                alt="profil fotoğrafı"
+                class="profil-image"
+              />
+              <i
+                class="fas fa-times"
+                style="
+                  position: absolute;
+                  right: 12px;
+                  top: -10px;
+                  font-size: 23px;
+                  cursor: pointer;
+                "
+                onclick="closeModal(2);"
+              ></i>
+            </div>
+            <div class="nav">
+              <a
+                href="javascript:void(0);"
+                class="nav-button"
+                onclick="openTest(0);"
+                style="
+                  background-color: rgb(12, 12, 12);
+                  color: rgba(245, 222, 179, 0.815);
+                "
+              >
+                <i
+                  class="fas fa-user profil-nav-icon"
+                  style="font-size: 24px"
+                ></i
+                ><span class="nav-span">Profil</span>
+              </a>
+              <a
+                href="javascript:void(0);"
+                class="nav-button"
+                onclick="openTest(1);"
+              >
+                <i
+                  class="fas fa-cog profil-nav-icon"
+                  style="font-size: 24px"
+                ></i
+                ><span class="nav-span">Düzenle</span>
+              </a>
+              <a
+                href="javascript:void(0);"
+                class="nav-button"
+                onclick="openTest(2);"
+                style="position: relative"
+                ><i
+                  class="fas fa-clipboard-list profil-nav-icon"
+                  style="font-size: 30px"
+                ></i
+                ><i
+                  class="fas fa-heart profil-nav-icon"
+                  style="color: red; position: absolute; top: 19%; left: 68%"
+                ></i
+                ><span class="nav-span">Favoriler</span></a
+              >
+              <a
+                href="javascript:void(0);"
+                class="nav-button"
+                onclick="openTest(3);"
+                style="position: relative"
+                ><i
+                  class="fas fa-clipboard-list profil-nav-icon"
+                  style="font-size: 30px"
+                ></i
+                ><i
+                  class="fas fa-check-circle profil-nav-icon"
+                  id="tick-icon"
+                  style="position: absolute; top: 17%; left: 70%"
+                ></i
+                ><span class="nav-span">İzlenecekler</span></a
+              >
+              <a
+                href="javascript:void(0);"
+                class="nav-button"
+                onclick="openTest(4);"
+                style="position: relative"
+                ><i
+                  class="fas fa-clipboard-list profil-nav-icon"
+                  style="font-size: 30px"
+                ></i
+                ><i
+                  class="fas fa-clock profil-nav-icon"
+                  id="clock-icon"
+                  style="position: absolute; top: 17%; left: 70%"
+                ></i
+                ><span class="nav-span">İzlenenler</span></a
+              >
+            </div>
+            <div class="right-nav-modal-frame-main">
+              <div class="right-nav-modal-frame-main-right">
+                <div class="right-nav-modal-frame-main-right-profil">
+                  <div
+                    class="right-nav-modal-frame-profil-table profil-element"
+                  >
+                    <table class="profil-info-table">
+                      <tr>
+                        <td class="profil-td-first">Adı :</td>
+                        <td class="profil-td-second" id="td-firstName">
+                          Bilinmiyor
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">Soyadı :</td>
+                        <td class="profil-td-second" id="td-lastName">
+                          Bilinmiyor
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">Doğum Tarihi :</td>
+                        <td class="profil-td-second" id="td-birthDay">
+                          Bilinmiyor
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">Cinsiyet :</td>
+                        <td class="profil-td-second" id="td-gender">
+                          Bilinmiyor
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">Telefon :</td>
+                        <td class="profil-td-second" id="td-phoneNumber">
+                          Bilinmiyor
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">Şehir :</td>
+                        <td class="profil-td-second" id="td-city">
+                          Bilinmiyor
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">Kullanıcı Adı :</td>
+                        <td class="profil-td-second" id="td-userName">
+                          bahar123
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="profil-td-first">E-posta :</td>
+                        <td class="profil-td-second" id="td-email">
+                          bar123@gmail.com
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="set-profil-frame profil-element">
+                    <div class="profil-nav-button-container">
+                      <div class="profil-nav-button-item">
+                        <a
+                          href="javascript:void(0);"
+                          onclick="openSetProfilElement(0);"
+                          class="set-profil-a"
+                          style="
+                            background-color: rgb(12, 12, 12);
+                            color: rgba(245, 222, 179, 0.815);
+                          "
+                        >
+                          <i
+                            class="fas fa-user-circle"
+                            style="font-size: 15px; margin-right: 5px"
+                          ></i>
+                          <span class="profil-nav-button-item-span"
+                            >Düzenle</span
+                          >
+                        </a>
+                        <a
+                          href="javascript:void(0);"
+                          onclick="openSetProfilElement(1);"
+                          class="set-profil-a"
+                        >
+                          <i
+                            class="fas fa-pen-square"
+                            style="font-size: 16.5px; margin-right: 5px"
+                          ></i>
+                          <span class="profil-nav-button-item-span"
+                            >Kullanıcı Adı Değiştir</span
+                          >
+                        </a>
+                        <a
+                          href="javascript:void(0);"
+                          onclick="openSetProfilElement(2);"
+                          class="set-profil-a"
+                        >
+                          <i
+                            class="fas fa-key"
+                            style="font-size: 15px; margin-right: 5px"
+                          ></i>
+                          <span class="profil-nav-button-item-span"
+                            >Şifre Değiştir</span
+                          >
+                        </a>
+                        <a
+                          href="javascript:void(0);"
+                          onclick="openSetProfilElement(3);"
+                          class="set-profil-a"
+                        >
+                          <i
+                            class="fas fa-at"
+                            style="font-size: 15px; margin-right: 5px"
+                          ></i>
+                          <span class="profil-nav-button-item-span"
+                            >E-posta Değiştir</span
+                          >
+                        </a>
+                      </div>
+                    </div>
+                    <form
+                      action="UpdatePublicServlet"
+                      id="setProfilForm"
+                      name="setProfilForm"
+                      class="right-nav-modal-frame-profil-form set-profil-element"
+                    >
+                      <div class="set-profil-container">
+                        <div class="set-profil-item-left">
+                          <div class="label-div">
+                            <label for="setProfilName">Ad</label>
+                            <input
+                              type="text"
+                              name="profilFirstName"
+                              id="profilFirstName"
+                              class="set-profil-input"
+                              placeholder="Bahar"
+                            />
+                          </div>
+                          <div class="label-div">
+                            <label for="setProfilLastName">Soyad</label>
+                            <input
+                              type="text"
+                              name="profilLastName"
+                              id="profilLastName"
+                              placeholder="Test"
+                            />
+                          </div>
+                          <div class="label-div">
+                            <label for="setProfilLastName">Doğum Tarihi</label>
+                            <input
+                              type="date"
+                              name="profilBirthDay"
+                              id="profilBirthDay"
+                              class="set-profil-input"
+                              style="padding: 14px"
+                            />
+                          </div>
+                          <div class="label-div">
+                            <label for="profilGender">Cinsiyet</label>
+                            <select name="profilGender" id="profilGender">
+                              <option value="Bilinmiyor">Bilinmiyor</option>
+                              <option value="Erkek">Erkek</option>
+                              <option value="Kadın">Kadın</option>
+                            </select>
+                          </div>
+                          <div class="label-div">
+                            <label for="profilCity">Şehir</label>
+                            <input
+                              type="text"
+                              name="profilCity"
+                              id="profilCity"
+                              placeholder="Tokat"
+                            />
+                          </div>
+                          <div class="label-div">
+                            <label for="profilPhoneNumber">Telefon no</label>
+                            <input
+                              type="tel"
+                              name="profilPhoneNumber"
+                              id="profilPhoneNumber"
+                              placeholder="Telefon no"
+                            />
+                          </div>
+                          <div class="label-div label-div-submit">
+                            <input
+                              type="button"
+                              value="Kaydet"
+                              id="profilButton"
+                              class="profil-submit-button"
+                            />
+                          </div>
+                        </div>
+                        <p id="profilText"></p>
+                      </div>
+                    </form>
+                    <form
+                      action="UserNameServlet"
+                      name="userNameForm"
+                      id="userNameForm"
+                      class="changeUserName-form set-profil-element"
+                    >
+                      <div class="changeUserName-form-container">
+                        <input
+                          class="profil-input user-name-input"
+                          type="text"
+                          name="UuserName"
+                          id="UuserName"
+                          placeholder="Yeni kullanıcı adı"
+                          onchange="controlInputForOnChange(3,0);"
+                        />
+                        <input
+                          class="profil-input user-name-input"
+                          type="password"
+                          name="Upassword"
+                          id="Upassword"
+                          placeholder="Şifreniz"
+                          onchange="controlInputForOnChange(3,1);"
+                        />
+                        <input
+                          type="button"
+                          value="Kaydet"
+                          class="profil-submit-button"
+                          id="userNameButton"
+                        />
+                        <p id="userNameMessage" class="warning-message"></p>
+                      </div>
+                    </form>
+                    <form
+                      action="PasswordServlet"
+                      name="passwordForm"
+                      id="passwordForm"
+                      class="changePassword-form set-profil-element"
+                    >
+                      <div class="changePassword-form-container">
+                        <input
+                          class="profil-input password-input"
+                          type="password"
+                          name="PoldPassword"
+                          id="PoldPassword"
+                          placeholder="Mevcut şifreniz"
+                          onchange="controlInputForOnChange(4,0);"
+                        />
+                        <input
+                          class="profil-input password-input"
+                          type="password"
+                          name="PnewPassword"
+                          id="PnewPassword"
+                          placeholder="Yeni şifreniz"
+                          onchange="controlInputForOnChange(4,1);"
+                        />
+                        <input
+                          type="button"
+                          value="Kaydet"
+                          class="profil-submit-button"
+                          id="passwordButton"
+                        />
+                        <p id="passwordMessage" class="warning-message"></p>
+                      </div>
+                    </form>
+                    <form
+                      action="EmailServlet"
+                      name="emailForm"
+                      id="emailForm"
+                      class="changeEmail-form set-profil-element"
+                    >
+                      <div class="changeEmail-form-container">
+                        <input
+                          class="profil-input email-input"
+                          type="text"
+                          name="EnewEmail"
+                          id="EnewEmail"
+                          placeholder="Yeni E-posta"
+                          onchange="controlInputForOnChange(5,0);"
+                        />
+                        <input
+                          class="profil-input email-input"
+                          type="password"
+                          name="Epassword"
+                          id="Epassword"
+                          placeholder="Şifreniz"
+                          onchange="controlInputForOnChange(5,1);"
+                        />
+                        <input
+                          type="button"
+                          value="Kaydet"
+                          class="profil-submit-button"
+                          id="emailButton"
+                        />
+                        <p id="emailMessage" class="warning-message"></p>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="favorite-form profil-element">
+                    <div id="favorite-form-item-id" class="favorite-form-item">
+                      <script>
+                        loadProfilFavorite();
+                      </script>
+                    </div>
+                  </div>
+                  <!---->
+                  <div class="wanttowatch-form profil-element">
+                    <div
+                      id="toBeWatched-form-item-id"
+                      class="favorite-form-item"
+                    >
+                      <script>
+                        loadProfilToBeWatched();
+                      </script>
+                    </div>
+                  </div>
+                  <div class="watched-form profil-element">
+                    <div id="watched-form-item-id" class="favorite-form-item">
+                      <script>
+                        loadProfilWatched();
+                      </script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--**************************STOP*******************************-->
+      </nav>
+      <main>
+        <div class="left-main" id="left-main">
+          <div class="left-main-home-page" id="homePage">
+            <!--
+                    <div class='left-main-content' onclick='movieScreenFunction();'>
+                        <div class="left-main-content-right">
+                            <div class="imdb" style="margin-top:0;">
+                                <i class="fas fa-star"></i>&nbsp;
+                                <span class="imdb-span">8.0/10</span>
+                            </div>
+                            <div class="imdb" title="İzlenme Sayısı">
+                                <i class="far fa-eye" style="font-size:15px;" title="İzlenme"></i>
+                                <span class="imdb-span" title="İzlenme">&nbsp;1500</span>
+                            </div>
+                            <div class="imdb" title="Film Süresi">
+                                <i class="far fa-clock"></i>
+                                <span class="imdb-span" style="font-size:10px;">&nbsp;1s 25dk</span>
+                            </div>
+                            <div class="imdb" title="Vizyon Tarihi">
+                                <i class="far fa-calendar-alt"></i>&nbsp;
+                                <span class="imdb-span" style="font-size:10px;">2021</span>
+                            </div>
+                            <div class="imdb" title="Ülke">
+                                <i class="far fa-flag"></i>
+                                <span class="imdb-span" style="font-size:10px;">&nbsp;Hindistan</span>
+                            </div>
+                        </div>
+                        <div class="left-main-content-header">
+                            <button class='left-main-content-a'>
+                                <img src='image/cruella.jpg' alt='resim' class='left-main-content-image'>
+                            </button>
+                        </div>
+                        <div class="left-main-bottom-frame">
+                            <div class="left-main-content-bottom">
+                                <p>AKSİYON BİLİM KURGU FANTASTİK</p>
+                            </div>
+                            <div class="movie-name">
+                                <p>Cruella</p>
+                            </div>
+                        </div>
+                    </div>
+-->
+
+            <script>
+              loadPageNew();
+            </script>
+          </div>
+          <div class="left-main-movie-screen" id="moviePage">
+            <div class="frame-header">
+              <h2 class="frame-header-text">The Last Samurai - Son Samuray</h2>
+            </div>
+            <div class="frame-main-top">
+              <div class="frame-main-top-image">
+                <img
+                  src="image/alita.jpg"
+                  alt="Alpha"
+                  id="image"
+                  title="Polaroid"
+                  class="frame-main-top-image-image"
+                />
+                <div
+                  class="frame-main-top-image-header"
+                  style="width: 100%; text-align: center; padding: 1px 0px"
+                >
+                  <p class="button-header-text">Listenize Ekleyin</p>
+                </div>
+
+                <div class="frame-main-top-buttons">
+                  <button class="frame-main-bottom-buttons-button">
+                    <i class="fas fa-clipboard-list"></i
+                    ><i
+                      class="fas fa-heart"
+                      id="heart-icon"
+                      style="color: red"
+                    ></i>
+                  </button>
+                  <button
+                    class="frame-main-bottom-buttons-button"
+                    style="margin-left: 10px; margin-right: 10px"
+                  >
+                    <i class="fas fa-clipboard-list"></i
+                    ><i class="fas fa-check-circle" id="tick-icon"></i>
+                  </button>
+                  <button class="frame-main-bottom-buttons-button">
+                    <i class="fas fa-clipboard-list"></i
+                    ><i class="fas fa-clock" id="clock-icon"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="frame-main-top-info">
+                <table class="info-table">
+                  <tr>
+                    <td class="td-first">Yönetmen :</td>
+
+                    <td class="td-second">Albert Hughes</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">Ülke :</td>
+
+                    <td class="td-second">ABD</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">Tür :</td>
+
+                    <td class="td-second">Aksiyon, Dram,Aksiyon, Dram,</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">IMDb :</td>
+
+                    <td class="td-second">6.8</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">İzlenme :</td>
+
+                    <td class="td-second">1400</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">Vizyon :</td>
+
+                    <td class="td-second">2 Mart 2018</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">Süre :</td>
+
+                    <td class="td-second">92 dk</td>
+                  </tr>
+                  <tr>
+                    <td class="td-first">Senaryo :</td>
+
+                    <td class="td-second">Bilinmiyor</td>
+                  </tr>
+                </table>
+                <div class="button-header">
+                  <p class="button-header-text">İzleme Seçenekleri</p>
+                </div>
+                <div class="frame-main-bottom-buttons">
+                  <button class="frame-main-top-buttons-button">
+                    Türkçe Altyazı
+                  </button>
+                  <button class="frame-main-top-buttons-button">
+                    Türkçe Dublaj
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="frame-main-bottom">
+              <h2 class="frame-main-bottom-header">Film Konusu</h2>
+              <p class="frame-main-bottom-content">
+                Marsilya polisinin gangsterlerle mücadelede etkisiz kalması
+                sonucu Paris, yeraltı suçlarıyla mücadele uzmanı Philippe
+                Jordan'ı Marsilya'ya gönderir. Yerel kolluk kuvvetlerinin,
+                özellikle gangster Sauveur Mecacci'nin suç ağını çökertmesine
+                yardımcı olması gerekmektedir. Ancak, Müfettiş Philippe
+                Jordan'ın alışılmışın dışında ki sert kolluk tarzı, Marsilya da
+                hoş karşılanmaz..Marsilya polisinin gangsterlerle mücadelede
+                etkisiz kalması sonucu Paris, yeraltı suçlarıyla mücadele uzmanı
+                Philippe Jordan'ı Marsilya'ya gönderir. Yerel kolluk
+                kuvvetlerinin, özellikle gangster Sauveur Mecacci'nin suç ağını
+                çökertmesine yardımcı olması gerekmektedir. Ancak, Müfettiş
+                Philippe Jordan'ın alışılmışın dışında ki sert kolluk tarzı,
+                Marsilya da hoş karşılanmaz..
+              </p>
+            </div>
+            <div class="frame-main-footer-title">Oyuncular</div>
+            <div class="frame-main-footer">
+              <div class="frame-footer-container">
+                <div class="frame-footer-item">
+                  <img
+                    src="image/hollywood gamer.jpg"
+                    alt="person image"
+                    class="frame-footer-item-image"
+                  />
+                  <p class="frame-footer-item-text">Charlize Theron</p>
+                </div>
+                <div class="frame-footer-item">
+                  <img
+                    src="image/tom.jpg"
+                    alt="player image"
+                    class="frame-footer-item-image"
+                  />
+                  <p class="frame-footer-item-text">Tom Cruise</p>
+                </div>
+                <div class="frame-footer-item">
+                  <img
+                    src="image/tom 2.jpg"
+                    alt="player image"
+                    class="frame-footer-item-image"
+                  />
+                  <p class="frame-footer-item-text">Ken Watanabe</p>
+                </div>
+                <div class="frame-footer-item">
+                  <img
+                    src="image/tom 3.jpg"
+                    alt="player image"
+                    class="frame-footer-item-image"
+                  />
+                  <p class="frame-footer-item-text">Hiroyuki Sanada</p>
+                </div>
+                <div class="frame-footer-item">
+                  <img
+                    src="image/tom 4.jpg"
+                    alt="player image"
+                    class="frame-footer-item-image"
+                  />
+                  <p class="frame-footer-item-text">Shin Koyamada</p>
+                </div>
+                <div class="frame-footer-item">
+                  <img
+                    src="image/tom 5.png"
+                    alt="player image"
+                    class="frame-footer-item-image"
+                  />
+                  <p class="frame-footer-item-text">Koyuki</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="left-main-admin-panel" id="adminPage">
+            <div class="admin-panel-left">
+              <div class="admin-panel-item">
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Film ekle</a
+                >
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Üye sil</a
+                >
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Button</a
+                >
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Button</a
+                >
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Button</a
+                >
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Button</a
+                >
+                <a href="javascript:void(0);" class="admin-panel-button"
+                  >Button</a
+                >
+              </div>
+            </div>
+            <div class="admin-panel-right">
+              <form
+                action="MovieRegisterServlet"
+                id="movieForm"
+                class="admin-panel-right-form"
+              >
+                <div class="admin-panel-right-container">
+                  <label for="movieName">Film adı</label>
+                  <input
+                    type="text"
+                    name="movieName"
+                    id="movieName"
+                    class="admin-panel-right-input"
+                    placeholder="Film adı"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieDirector">Yönetmen</label>
+                  <input
+                    type="text"
+                    name="movieDirector"
+                    id="movieDirector"
+                    class="admin-panel-right-input"
+                    placeholder="Yönetmen"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieCountry">Ülke</label>
+                  <input
+                    type="text"
+                    name="movieCountry"
+                    id="movieCountry"
+                    class="admin-panel-right-input"
+                    placeholder="Ülke"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieType">Film türü</label>
+                  <input
+                    type="text"
+                    name="movieType"
+                    id="movieType"
+                    class="admin-panel-right-input"
+                    placeholder="Film türü"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieImdb">IMDb puanı</label>
+                  <input
+                    type="text"
+                    name="movieImdb"
+                    id="movieImdb"
+                    class="admin-panel-right-input"
+                    placeholder="IMDb"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieWatchNumber">İzlenme sayısı</label>
+                  <input
+                    type="text"
+                    name="movieWatchNumber"
+                    id="movieWatchNumber"
+                    class="admin-panel-right-input"
+                    placeholder="İzlenme sayısı"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieVisionDate">Vizyon tarihi</label>
+                  <input
+                    type="text"
+                    name="movieVisionDate"
+                    id="movieVisionDate"
+                    class="admin-panel-right-input"
+                    placeholder="Vizyon Tarihi"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieTime">Süre</label>
+                  <input
+                    type="text"
+                    name="movieTime"
+                    id="movieTime"
+                    class="admin-panel-right-input"
+                    placeholder="Süre"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieScenario">Senaryo</label>
+                  <input
+                    type="text"
+                    name="movieScenario"
+                    id="movieScenario"
+                    class="admin-panel-right-input"
+                    placeholder="Senaryo"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="moviePlayer">Oyuncular</label>
+                  <input
+                    type="text"
+                    name="moviePlayer"
+                    id="moviePlayer"
+                    class="admin-panel-right-input"
+                    placeholder="Oyuncular"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieImage">Resim</label>
+                  <input
+                    type="text"
+                    name="movieImage"
+                    id="movieImage"
+                    class="admin-panel-right-input"
+                    placeholder="Resim adı"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <label for="movieSubject">Özet</label>
+                  <input
+                    type="text"
+                    name="movieSubject"
+                    id="movieSubject"
+                    class="admin-panel-right-input"
+                    placeholder="Özet"
+                  />
+                </div>
+                <div class="admin-panel-right-container">
+                  <input
+                    type="button"
+                    value="Kaydet"
+                    name="movieButton"
+                    id="movieButton"
+                    class="admin-panel-right-button"
+                  />
+                </div>
+                <div
+                  class="admin-panel-right-container"
+                  style="text-align: center"
+                >
+                  <p class="warning-message" id="movieMessage">
+                    Uyarı mesajı görüntüleme alanı
+                  </p>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="right-main">
+          <div class="right-main-container">
+            <div class="right-main-header">
+              <button class="right-main-header-button">
+                Kategoriler&ensp;<i class="fas fa-angle-down"></i>
+              </button>
+            </div>
+            <ul class="ul-categori">
+              <li><a href="#">Aksiyon</a></li>
+              <li><a href="#">Animasyon</a></li>
+              <li><a href="#">Belgesel</a></li>
+              <li><a href="#">Bilim Kurgu</a></li>
+              <li><a href="#">Biyografi</a></li>
+              <li><a href="#">Dram</a></li>
+              <li><a href="#">Fantastik</a></li>
+              <li><a href="#">Gerilim</a></li>
+              <li><a href="#">Gizem</a></li>
+              <li><a href="#">Hint</a></li>
+              <li><a href="#">Komedi</a></li>
+              <li><a href="#">Korku</a></li>
+              <li><a href="#">Macera</a></li>
+              <li><a href="#">Müzikal</a></li>
+              <li><a href="#">Romantik</a></li>
+              <li><a href="#">Savaş</a></li>
+              <li><a href="#">Suç</a></li>
+              <li><a href="#">Spor</a></li>
+              <li><a href="#">Tarih</a></li>
+              <li><a href="#">Western</a></li>
+            </ul>
+          </div>
+        </div>
+      </main>
+      <nav
+        class="nav-bottom"
+        style="
+          justify-content: center;
+          background-color: rgb(12, 12, 12);
+          border-top: 1px solid rgba(245, 222, 179, 0.815);
+          border-bottom: 1px solid rgba(245, 222, 179, 0.815);
+        "
+      >
+        <a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a>
+        <a href="#">5</a> <a href="#">6</a> <a href="#">7</a> <a href="#">8</a>
+      </nav>
+      <footer id="footer">
+        <p
+          style="
+            color: rgb(173, 173, 173);
+            font-weight: lighter;
+            font-size: 15px;
+          "
+        >
+          Sitedeki filmler, film fragmanları ve diğer videolar kesinlikle kendi
+          sunucularımıza yüklenilmemektedir. Bu yüzden sitemiz hiçbir yasal
+          hükümlülüğe tabi tutulamaz. Hak sahiplerinin telif atması halinde 3 iş
+          günü içeresinde videolar kaldırılacaktır.
+        </p>
+      </footer>
+    </div>
+    <script src="main.js"></script>
+    <script src="input_control.js"></script>
+    <script>
+      var categoriCont = false;
+      $(document).ready(function () {
+        $(".right-main-header-button").click(function () {
+          if (!categoriCont) {
+            $(".ul-categori").slideDown(400);
+            categoriCont = true;
+          } else {
+            $(".ul-categori").slideUp(400);
+            categoriCont = false;
+          }
+        });
+      });
+    </script>
+    <script>
+      $(document).ready(function () {
+        $("#loginButton").click(function () {
+          if (!controlInput(0)) {
+            return false;
+          }
+          var data = $("#loginForm").serialize();
+          var loginInput = $(".login-input");
+          $.ajax({
+            type: "POST",
+            url: "LoginServlet",
+            dataType: "JSON",
+            data: data,
+            success: function (data) {
+              if (data.status) {
+                setWarningMessage("#loginMessage", data.message, "green");
+                setLogin(0);
+                setProfil();
+              } else {
+                setWarningMessage("#loginMessage", data.message, "red");
+                setShadow(loginInput[data.index], "red");
+              }
+            },
+          });
+        });
+        $("#registerButton").click(function () {
+          if (!controlInput(1)) {
+            return false;
+          }
+          var data = $("#registerForm").serialize();
+          var registerInput = $(".register-input");
+          $.ajax({
+            type: "POST",
+            url: "RegisterServlet",
+            data: data,
+            dataType: "JSON",
+            success: function (data) {
+              if (data.status) {
+                setWarningMessage("#registerMessage", data.message, "green");
+                setLogin(1);
+                setProfil();
+              } else {
+                setWarningMessage("#registerMessage", data.message, "red");
+                setShadow(registerInput[data.index], "red");
+              }
+            },
+          });
+        });
+        $("#profilButton").click(function () {
+          var firstName = $("#profilFirstName").val();
+          var lastName = $("#profilLastName").val();
+          var birthDay = $("#profilBirthDay").val();
+          var gender = $("#profilGender :selected").text();
+          var city = $("#profilCity").val();
+          var phoneNumber = $("#profilPhoneNumber").val();
+          $.ajax({
+            type: "POST",
+            url: "UpdatePublicServlet",
+            data: {
+              firstName: firstName,
+              lastName: lastName,
+              birthDay: birthDay,
+              gender: gender,
+              city: city,
+              phoneNumber: phoneNumber,
+            },
+            dataType: "JSON",
+            success: function (data) {
+              if (data.status) {
+                setProfil();
+                setWarningMessage("#profilText", data.message, "green");
+              } else {
+                setWarningMessage("#profilText", data.message, "red");
+              }
+            },
+          });
+        });
+
+        $("#userNameButton").click(function () {
+          if (!controlInput(3)) {
+            return false;
+          }
+          var data = $("#userNameForm").serialize();
+          var userNameInput = $(".user-name-input");
+          $.ajax({
+            type: "POST",
+            url: "UserNameServlet",
+            data: data,
+            dataType: "JSON",
+            success: function (data) {
+              if (data.status) {
+                setProfil();
+                setWarningMessage("#userNameMessage", data.message, "green");
+              } else {
+                setWarningMessage("#userNameMessage", data.message, "red");
+                setLowShadow(userNameInput[data.index], "red");
+              }
+            },
+          });
+        });
+
+        $("#passwordButton").click(function () {
+          if (!controlInput(4)) {
+            return false;
+          }
+          var data = $("#passwordForm").serialize();
+          var passwordInput = $(".password-input");
+          $.ajax({
+            type: "POST",
+            url: "PasswordServlet",
+            data: data,
+            dataType: "JSON",
+            success: function (data) {
+              if (data.status) {
+                setWarningMessage("#passwordMessage", data.message, "green");
+              } else {
+                setWarningMessage("#passwordMessage", data.message, "red");
+                setLowShadow(passwordInput[data.index], "red");
+              }
+            },
+          });
+        });
+        $("#emailButton").click(function () {
+          if (!controlInput(5)) {
+            return false;
+          }
+          var data = $("#emailForm").serialize();
+          var emailInput = $(".email-input");
+          $.ajax({
+            type: "POST",
+            url: "EmailServlet",
+            data: data,
+            dataType: "JSON",
+            success: function (data) {
+              if (data.status) {
+                setWarningMessage("#emailMessage", data.message, "green");
+                setProfil();
+              } else {
+                setWarningMessage("#emailMessage", data.message, "red");
+                setLowShadow(emailInput[data.index], "red");
+              }
+            },
+          });
+        });
+        $("#movieButton").click(function () {
+          var data = $("#movieForm").serialize();
+          $.ajax({
+            type: "POST",
+            url: "MovieRegisterServlet",
+            data: data,
+            dataType: "JSON",
+            success: function (data) {
+              if (data.status) {
+                setWarningMessage("#movieMessage", data.message, "green");
+              } else {
+                setWarningMessage("#movieMessage", data.message, "red");
+              }
+            },
+          });
+        });
+      });
+
+      function setProfil() {
+        $.ajax({
+          type: "POST",
+          url: "ProfilServlet",
+          dataType: "JSON",
+          success: function (data) {
+            $("#td-firstName").html(data.firstName);
+            $("#profilFirstName").attr("value", data.firstName);
+            $("#td-lastName").html(data.lastName);
+            $("#profilLastName").attr("value", data.lastName);
+            $("#td-birthDay").html(data.birthDay);
+            $("#profilBirthDay").attr("value", data.birthDay);
+            $("#td-gender").html(data.gender);
+            $("#td-phoneNumber").text(data.phoneNumber);
+            $("#profilPhoneNumber").attr("value", data.phoneNumber);
+            $("#td-city").text(data.city);
+            $("#profilCity").attr("value", data.city);
+            $("#td-userName").text(data.userName);
+            $("#td-email").text(data.email);
+          },
+        });
+      }
+
+      function setLogin(modalIndex) {
+        closeModal(modalIndex);
+        $(".header-login-button1").css("display", "none");
+        $(".header-login-button2").css("display", "none");
+        $(".header-logout-button").css("display", "block");
+        $("#profilNavButton").css("display", "block");
+      }
+
+      function setWarningMessage(id, message, color) {
+        $(id).text(message).css("color", color).fadeIn();
+      }
+
+      function setShadow(inputID, color) {
+        $(inputID).css("boxShadow", "0px 0px 4px " + color);
+      }
+
+      function setLowShadow(inputID, color) {
+        $(inputID).css("boxShadow", "0px 0px 1px " + color);
+      }
+
+      function setBorder(inputID, color) {
+        $(inputID).css("border", "1px solid " + color);
+      }
+    </script>
+  </body>
+</html>
